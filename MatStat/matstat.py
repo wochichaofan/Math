@@ -6,18 +6,19 @@ class Distribution:
     def __init__(self, data):
         assert type(data) in (pd.Series, np.ndarray), 'Check data type'
         self.data = self.build_series(data)
-        self.dist_type = str(self).split(' ')[0][-3:]
     
     def plot_hist(self, xcol, ycol):
         plt.bar(self.data[xcol], self.data[ycol])
         plt.xticks(self.data[xcol])
         plt.show()
     
+#     Make a function plot all
+    
     def plot_Fx(self): 
         xs, w_ns = self.build_Fx()
         mn, mx = min([i for i in xs if i != np.NINF]), max([i for i in xs if i != np.inf])
         
-        if self.dist_type == 'DRV':
+        if 'discreet' in str(self):
             for prob, i, j in zip(w_ns, xs[:-1], xs[1:]):
                 x1 = mn-10e5 if i == np.NINF else i
                 x2 = mx+10e5 if j == np.inf else j
@@ -25,7 +26,7 @@ class Distribution:
                 plt.plot([x1, x2], [prob]*2, label=fr'x $ \in $ ({i}; {j})', linewidth=2)
             plt.legend()
                 
-        else:
+        elif 'interval' in str(self):
             plt.plot([mn-10e5, mn], [0]*2, color='orange', linewidth=2)
             plt.plot(xs, w_ns, color='orange', linewidth=2)
             plt.scatter(xs, w_ns)
@@ -37,15 +38,12 @@ class Distribution:
         plt.axvline(0, color='k', linewidth =.5)
         
     def plot_polygon(self):
-        if self.dist_type == 'DRV':
+        if 'discreet' in str(self):
             plt.plot(self.data.index[:-1], self.data['w'][:-1])
-        else:
+        elif 'interval' in str(self):
             plt.plot(self.data['x_i'], self.data['w_i'])
             
-class DRV(Distribution):
-    """
-    DRV stands for Discreet random variable (Непрерывная случайная величина)
-    """
+class discreetVariationSeries(Distribution):
     def __init__(self, data):
         super().__init__(data)
         
@@ -83,10 +81,7 @@ class DRV(Distribution):
         
         return iter_list, w_ns
     
-class CRV(Distribution):
-    """
-    CRV stands for Continuous random variable (Непрерывная случайная величина)
-    """
+class intervalVariationSeries(Distribution):
     def __init__(self, data):
         super().__init__(data)
         
