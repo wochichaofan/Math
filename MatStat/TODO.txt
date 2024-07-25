@@ -1,0 +1,3 @@
+MATH:
+1) Make a different class for stats counting, different class for plotting stuff
+2) Make a func to plot all plots possible
