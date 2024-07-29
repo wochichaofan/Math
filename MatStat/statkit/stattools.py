@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from math import ceil
+from statkit.functions import *
 
 class Stats(object):
     def __init__(self, seriesClass):
@@ -64,7 +65,7 @@ class Stats(object):
     def discreet_stats(self, df, total_n):
         self.mean = sum(df['x'] * df['n']) / total_n
         self.mode = df.iloc[max(df.index, key=lambda x: df['n'][x])]['x']
-        self.median = min(df[df['w_cum'] >= .5].index)
+        self.median = df['x'][min(df[df['w_cum'] >= .5].index)]
     
     def count_rel_stats(self):
         self.СV = self.std/self.mean * 100

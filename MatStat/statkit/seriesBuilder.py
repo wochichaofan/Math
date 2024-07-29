@@ -3,7 +3,8 @@ import pandas as pd
 
 class GeneralSeries:
     def __init__(self, data):
-        assert type(data) in (pd.Series, np.ndarray), 'Check data type'
+        # assert type(data) in (pd.Series, np.ndarray), 'Check data type'
+        data = np.array(data)
         self.check_discreet = lambda: 'discreet' in str(self)
         self.init_series = data
         self.table = self.build_series(data)
@@ -33,6 +34,9 @@ class discreetVariationSeries(GeneralSeries):
         return df.apply(lambda x: round(x, 2))
     
     def from_scratch(self, data):
+        """
+        Form a series from 1-dim data
+        """
         data = pd.Series(data)
         ns = data.value_counts().sort_index()
         ws = ns / len(data)
@@ -46,6 +50,10 @@ class discreetVariationSeries(GeneralSeries):
         return cols #, ind
     
     def from_dist(self, data):
+        """
+        Form a series from 2-dim data of same length
+        Data should be of a kind [[x_i], [n_i]]
+        """
         ns = data[-1]
         ws = data[-1] / sum(data[-1])
         wcum = np.cumsum(ws)
