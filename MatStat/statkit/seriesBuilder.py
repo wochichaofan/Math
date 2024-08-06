@@ -1,14 +1,20 @@
 import numpy as np
 import pandas as pd
+from statkit.stattools import Stats
+import copy
 
 class GeneralSeries:
-    def __init__(self, data):
+    def __init__(self, data, count_stats=True):
         # assert type(data) in (pd.Series, np.ndarray), 'Check data type'
         data = np.array(data)
         self.check_discreet = lambda: 'discreet' in str(self)
         self.init_series = data
         self.table = self.build_series(data)
-        # self.stats()
+        if count_stats == True:
+            for k, v in Stats(self).__dict__.items():
+                if k not in ('check_discreet', 'data'):
+                    self.__dict__[k] = copy.deepcopy(v)
+                
     
     def get_build_func(self):
         if self.check_shape():
@@ -23,8 +29,8 @@ class GeneralSeries:
         return len(self.init_series.shape) == 1 
             
 class discreetVariationSeries(GeneralSeries):
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, count_stats=True):
+        super().__init__(data, count_stats=count_stats)
     
     def build_series(self, data):
         cols = self.get_build_func()(data)
@@ -76,8 +82,8 @@ class discreetVariationSeries(GeneralSeries):
         return iter_list, w_ns
     
 class intervalVariationSeries(GeneralSeries):
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, count_stats=True):
+        super().__init__(data, count_stats=count_stats)
         
     def build_series(self, data, qs=None, dist_inter='equal'):
         data = self.check_interval(data)
