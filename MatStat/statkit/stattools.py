@@ -9,6 +9,7 @@ class Stats(object):
         self.data = seriesClass.table
         self.count_abs_stats()
         self.count_rel_stats()
+        self.form_stats_df()
     
     def count_abs_stats(self):
         df = self.data.drop('Total')
@@ -69,11 +70,13 @@ class Stats(object):
     
     def count_rel_stats(self):
         self.СV = self.std/self.mean * 100
-    
-    def show_stats(self):
+
+    def form_stats_df(self):
         names = ('mean', 'mode', 'median', 'range', 'abs_dev', 'disp', 'UB disp', 'std', 'UB_std', 'coeff var')
         vals = (self.mean, self.mode, self.median, self.range, self.abs_dev, self.disp, self.UB_disp, self.std, self.UB_std, self.СV)
         round_vals = map(lambda x: round(x, 2), vals)
         dict_ = {n: [v] for n, v in zip(names, round_vals)}
-        
-        return pd.DataFrame.from_dict(dict_)
+        self.stats_data = pd.DataFrame.from_dict(dict_)
+    
+    def show_stats(self):
+        return self.stats_data
