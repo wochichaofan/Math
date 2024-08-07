@@ -15,5 +15,8 @@ def tinv(alpha, n):
     """
     return stat_round(t.isf((1-alpha)/2, n-1))
 
-def chiinv(prob, n):
-    return chi2.isf(prob, n-1)
+def chi2inv(prob, n, prec=True):
+    if prec == False:
+        return chi2.isf(prob, n)
+    else:
+        return chi2.isf(prob, n-1)
