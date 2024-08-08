@@ -1,8 +1,8 @@
 MATH:
 1) -- DONE Make a different class for stats counting
 2) Makea a func to separate series by quantiles
-3) Fix MatStat presentation file
-4) Add class to count confidence intervals
+3) --DONE Fix MatStat presentation file
+4) -- DONE Add class to count confidence intervals
 
-3) different class for plotting stuff
+3) -- DONE different class for plotting stuff
 3.1) Make a func to plot all plots possible
